@@ -5,13 +5,19 @@ const App = () => {
     { name: 'Arto Hellas' }
   ])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const HandleNameChange = (e) => {
     setNewName(e.target.value)
   }
+
+  const HandleNumberChange = (e) => {
+    setNewNumber(e.target.value)
+  }
+
   const HandleAddPerson = (e) => {
     e.preventDefault()
-    const newPerson = { name: newName }
+    const newPerson = { name: newName, number: newNumber }
 
     const found = persons.find((p) => p.name === newPerson.name)
     if (found) {
@@ -21,6 +27,7 @@ const App = () => {
       setPersons([...persons, newPerson])
     }
     setNewName('')
+    setNewNumber('')
   }
 
   return (
@@ -31,11 +38,14 @@ const App = () => {
           name: <input value={newName} onChange={HandleNameChange} />
         </div>
         <div>
+          number: <input value={newNumber} onChange={HandleNumberChange} />
+        </div>
+        <div>
           <button type="submit" >add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <p key={person.name}>{person.name}</p>)}
+      {persons.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
     </div>
   )
 }
