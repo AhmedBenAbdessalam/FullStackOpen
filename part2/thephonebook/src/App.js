@@ -11,8 +11,15 @@ const App = () => {
   }
   const HandleAddPerson = (e) => {
     e.preventDefault()
-    setPersons([...persons, { name: newName }])
-    console.log(persons)
+    const newPerson = { name: newName }
+
+    const found = persons.find((p) => p.name === newPerson.name)
+    if (found) {
+      alert(`${newName} is already added to phonebook`)
+    }
+    else {
+      setPersons([...persons, newPerson])
+    }
     setNewName('')
   }
 
