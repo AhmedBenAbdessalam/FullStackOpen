@@ -1,5 +1,32 @@
 import { useState } from 'react'
 
+const SearchFilter = ({ searchTerm, setSearchTerm }) => {
+  const HandleSearchChange = (e) => {
+    setSearchTerm(e.target.value)
+  }
+  return (
+    <div>
+      filter shown with<input value={searchTerm} onChange={HandleSearchChange} ></input>
+    </div>
+  )
+}
+
+
+const AddPerson = ({ HandleAddPerson, newName, HandleNameChange, newNumber, HandleNumberChange }) => {
+  return (
+    <form onSubmit={HandleAddPerson}>
+      <div>
+        name: <input value={newName} onChange={HandleNameChange} />
+      </div>
+      <div>
+        number: <input value={newNumber} onChange={HandleNumberChange} />
+      </div>
+      <div>
+        <button type="submit" >add</button>
+      </div>
+    </form>
+  )
+}
 
 const DisplayNumbers = ({ persons, searchTerm }) => {
   return (
@@ -29,7 +56,7 @@ const App = () => {
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
+
 
   const HandleNameChange = (e) => {
     setNewName(e.target.value)
@@ -39,9 +66,7 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
-  const HandleSearchChange = (e) => {
-    setSearchTerm(e.target.value)
-  }
+
 
   const HandleAddPerson = (e) => {
     e.preventDefault()
@@ -57,25 +82,15 @@ const App = () => {
     setNewName('')
     setNewNumber('')
   }
+  const [searchTerm, setSearchTerm] = useState('')
+
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with<input value={searchTerm} onChange={HandleSearchChange} ></input>
-      </div>
+      <SearchFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <h2>add a new</h2>
-      <form onSubmit={HandleAddPerson}>
-        <div>
-          name: <input value={newName} onChange={HandleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={HandleNumberChange} />
-        </div>
-        <div>
-          <button type="submit" >add</button>
-        </div>
-      </form>
+      <AddPerson HandleAddPerson={HandleAddPerson} newName={newName} HandleNameChange={HandleNameChange} newNumber={newNumber} HandleNumberChange={HandleNumberChange} />
       <h2>Numbers</h2>
       <DisplayNumbers persons={persons} searchTerm={searchTerm} />
     </div>
