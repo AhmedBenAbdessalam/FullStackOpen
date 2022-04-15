@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+//.env 
 
 const Filter = ({ searchTerm, handleSearch }) => {
   return (
@@ -34,7 +35,7 @@ const Display = ({ displayCountries, setDisplayCountries }) => {
   useEffect(() => {
     if (displayCountries.length > 0) {
       const path = `https://api.openweathermap.org/data/2.5/weather?lat=${displayCountries[0].latlng
-      [0]}&lon=${displayCountries[0].latlng[1]}&appid=${"2f1fed7d74df2a4db187c456cb493c35"}`
+      [0]}&lon=${displayCountries[0].latlng[1]}&appid=${process.env.REACT_APP_API_KEY}`
       axios.get(path).then(res => res.data).then(data => {
         setWeather(data)
       })
