@@ -1,0 +1,8 @@
+.valid {
+  color: green;
+  background-color: #cbcbcb;
+  border: 1px solid green;
+  border-radius: 5px;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+}
