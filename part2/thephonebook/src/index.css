@@ -6,3 +6,12 @@
   padding: 0.5rem;
   font-size: 1.5rem;
 }
+
+.error {
+  color: red;
+  background-color: #cbcbcb;
+  border: 1px solid red;
+  border-radius: 5px;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+}

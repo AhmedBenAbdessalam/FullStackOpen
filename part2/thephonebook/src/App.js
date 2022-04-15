@@ -55,13 +55,13 @@ const DisplayNumbers = ({ persons, searchTerm, setPersons }) => {
   )
 }
 
-const Notification = ({ message }) => {
+const Notification = ({ message, messageClass }) => {
   if (message === null) {
     return null
   }
 
   return (
-    <div className='valid'>
+    <div className={messageClass}>
       {message}
     </div>
   )
@@ -81,6 +81,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [message, setMessage] = useState(null)
+  const [messageClass, setMessageClass] = useState(null)
 
 
   const HandleNameChange = (e) => {
@@ -110,6 +111,14 @@ const App = () => {
           .then((data) => {
             console.log(data);
             setPersons(persons.map(p => p.id !== found.id ? p : data))
+          }).catch(error => {
+            setMessage(`Information of ${newName} has already been removed from server`)
+            setMessageClass('error')
+            setPersons(persons.filter(p => p.id !== found.id))
+            setTimeout(() => {
+              setMessage(null)
+            }
+              , 5000)
           })
       }
     }
@@ -118,6 +127,7 @@ const App = () => {
         .create(newPerson)
       setPersons([...persons, newPerson])
       setMessage(`Added ${newName}`)
+      setMessageClass('valid')
       setTimeout(() => {
         setMessage(null)
       }, 5000);
@@ -132,7 +142,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} messageClass={messageClass} />
       <SearchFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <h2>add a new</h2>
       <AddPerson HandleAddPerson={HandleAddPerson} newName={newName} HandleNameChange={HandleNameChange} newNumber={newNumber} HandleNumberChange={HandleNumberChange} />
