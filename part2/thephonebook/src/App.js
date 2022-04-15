@@ -85,8 +85,20 @@ const App = () => {
     const newPerson = { name: newName, number: newNumber }
 
     const found = persons.find((p) => p.name === newPerson.name)
-    if (found) {
+    if (found && found.number === newPerson.number) {
       alert(`${newName} is already added to phonebook`)
+    }
+    else if (found && found.number !== newPerson.number) {
+      const result = window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)
+      if (result) {
+        personService
+          .update(found.id, newPerson)
+          .then(res => res.data)
+          .then((data) => {
+            console.log(data);
+            setPersons(persons.map(p => p.id !== found.id ? p : data))
+          })
+      }
     }
     else {
       personService
