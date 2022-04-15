@@ -29,14 +29,21 @@ const AddPerson = ({ HandleAddPerson, newName, HandleNameChange, newNumber, Hand
   )
 }
 
-const DisplayNumbers = ({ persons, searchTerm }) => {
+const DisplayNumbers = ({ persons, searchTerm, setPersons }) => {
   return (
     <>
       {persons.map(person => {
         if (person.name.toUpperCase().includes(searchTerm.toUpperCase())) {
           console.log(person.name);
           return (
-            <p key={person.name}>{person.name} {person.number}</p>
+            <p key={person.name}>{person.name} {person.number} <button onClick={() => {
+              const result = window.confirm(`Delete ${person.name} ?`)
+              if (result) {
+
+                personService.deletePerson(person.id)
+                setPersons(persons.filter(p => p.id !== person.id))
+              }
+            }} >delete</button> </p>
           )
         }
         else
@@ -99,7 +106,7 @@ const App = () => {
       <h2>add a new</h2>
       <AddPerson HandleAddPerson={HandleAddPerson} newName={newName} HandleNameChange={HandleNameChange} newNumber={newNumber} HandleNumberChange={HandleNumberChange} />
       <h2>Numbers</h2>
-      <DisplayNumbers persons={persons} searchTerm={searchTerm} />
+      <DisplayNumbers persons={persons} setPersons={setPersons} searchTerm={searchTerm} />
     </div>
   )
 }
