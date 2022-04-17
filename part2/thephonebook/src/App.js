@@ -124,13 +124,22 @@ const App = () => {
     }
     else {
       personService
-        .create(newPerson)
-      setPersons([...persons, newPerson])
-      setMessage(`Added ${newName}`)
-      setMessageClass('valid')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000);
+        .create(newPerson).then(response => {
+          setPersons([...persons, newPerson])
+          setMessage(`Added ${newName}`)
+          setMessageClass('valid')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000);
+        }).catch(error => {
+          console.log(error.response.data.error)
+          setMessage(error.response.data.error)
+          setMessageClass('error')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000);
+        })
+
 
     }
     setNewName('')
