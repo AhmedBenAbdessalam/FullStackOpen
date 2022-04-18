@@ -51,10 +51,10 @@ const bigListOfBlogs = [
   }
 ]
 
-test('of a big list get author with most blogs and the number of blogs',() => {
-  const result = list_helper.mostBlogs(bigListOfBlogs)
+test.only('of a big list get author with most likes and the number of likes', () => {
+  const result = list_helper.mostLikes(bigListOfBlogs)
   expect(result).toEqual({
-    author: "Robert C. Martin",
-    blogs: 3
+    author: "Edsger W. Dijkstra",
+    likes: 17
   })
-})
+}, 100000)
