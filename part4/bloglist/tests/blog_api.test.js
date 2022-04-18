@@ -73,6 +73,26 @@ test('post create a new blog', async () => {
   expect(response.body.length).toBe(initialBlogs.length + 1)
   expect(titles).toContain(newBlog.title)
 })
+// test that post create a new blog with likes set to 0 if not defined
+test('post create a new blog with likes set to 0 if not defined', async () => {
+  const newBlog = {
+    title: 'cool blog 4',
+    author: 'cool author 4',
+    url: 'cool url 4'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+  const response = await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+  const likes = response.body.map(r => r.likes)
+  expect(likes).toContain(0)
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
