@@ -47,10 +47,10 @@ test('blogs are returned as json', async () => {
 // test that the unique identifier property of the blog posts is named id
 test('unique identifier property of blog posts is named id', async () => {
   const response = await api
-    .post('/api/blogs')
-    .expect(201)
+    .get('/api/blogs')
+    .expect(200)
     .expect('Content-Type', /application\/json/)
-  expect(response.body.id).toBeDefined()
+  expect(response.body[0].id).toBeDefined()
 })
 // test that post create a new blog
 test('post create a new blog', async () => {
@@ -92,7 +92,16 @@ test('post create a new blog with likes set to 0 if not defined', async () => {
   const likes = response.body.map(r => r.likes)
   expect(likes).toContain(0)
 })
-
+// test that post return error if title or url is missing
+test('post return error if title or url is missing', async () => {
+  const newBlog = {
+    author: 'cool author 4'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
 
 afterAll(() => {
   mongoose.connection.close()
