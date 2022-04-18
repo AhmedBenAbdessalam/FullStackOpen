@@ -95,6 +95,25 @@ test('delete a blog', async () => {
   const titles = blogsAtEnd.map(r => r.title)
   expect(titles).not.toContain(blogToDelete.title)
 })
+// test that put update a blog
+test('put update a blog', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+  const updatedBlog = {
+    title: 'cool blog 4',
+    author: 'cool author 4',
+    url: 'cool url 4',
+    likes: 10
+  }
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(updatedBlog)
+    .expect(200)
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd.length).toBe(blogsAtStart.length)
+  const likes = blogsAtEnd.map(r => r.likes)
+  expect(likes).toContain(updatedBlog.likes)
+})
 
 afterAll(() => {
   mongoose.connection.close()
