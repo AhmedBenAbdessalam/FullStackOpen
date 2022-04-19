@@ -106,9 +106,6 @@ const App = () => {
         {user.name} logged in 
         <button onClick={handleLogout}>logout</button>
       </p>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
       <h2>create new</h2>
       <form onSubmit={handleNewBlog}>
         <div>
@@ -133,6 +130,9 @@ const App = () => {
           />
         </div>
         <button type="submit">create</button>
+        {blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />
+        )}
       </form>
     </div>
   )
