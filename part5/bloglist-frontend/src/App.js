@@ -8,6 +8,9 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setUrl] = useState("")
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -20,6 +23,7 @@ const App = () => {
     {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   },[])
 
@@ -29,6 +33,7 @@ const App = () => {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedBlogappUser',JSON.stringify(user))
       setUser(user)
+      blogService.setToken(user.token)
       setUsername('')
       setPassword('')
     } catch (error) {
@@ -39,7 +44,20 @@ const App = () => {
     setUser(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }
-  
+  const handleNewBlog = async e => {
+    e.preventDefault()
+    try {
+     const returnedBlog = await blogService.create({ title, author, url })
+     setBlogs(blogs.concat(returnedBlog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (error) {
+      console.log(error)
+    }
+    
+
+  } 
   if (user === null) {
     return (
       <div>
@@ -79,6 +97,31 @@ const App = () => {
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
+      <h2>create new</h2>
+      <form onSubmit={handleNewBlog}>
+        <div>
+          title:
+          <input
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          author:
+          <input
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url:
+          <input
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
+      </form>
     </div>
   )
 }
