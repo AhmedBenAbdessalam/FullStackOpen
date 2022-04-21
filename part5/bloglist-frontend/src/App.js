@@ -3,7 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
-import LoginBlog from './components/loginBlog'
+import BlogForm from './components/blogForm'
 import Togglable from './components/toggable'
 
 const App = () => {
@@ -11,9 +11,6 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
   const [notification, setNotification] = useState({})
 
   useEffect(() => {
@@ -51,26 +48,12 @@ const App = () => {
     setUser(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }
-  const handleNewBlog = async e => {
-    e.preventDefault()
-    try {
-     const returnedBlog = await blogService.create({ title, author, url })
-     setBlogs(blogs.concat(returnedBlog))
-      setNotification({style: "valid", message:`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`})
-      setTimeout(() => {
-        setNotification({})
-      }, 5000)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-    } catch (error) {
-      setNotification({style: "invalid", message:"something went wrong when adding a new blog"})
-      setTimeout(() => {
-        setNotification({})
-      }, 5000)
-    }
-  }
   
+  const addBlog = async (blogObj) => {
+    const returnedObj = await blogService.create(blogObj)
+    setBlogs(blogs.concat(returnedObj))
+  }
+
   if (user === null) {
     return (
       <div>
@@ -110,14 +93,9 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="create new blog">
-        <LoginBlog
-          handleNewBlog={handleNewBlog}
-          title={title}
-          author={author}
-          url={url}
-          handleTitleChange={({ target }) => setTitle(target.value)}
-          handleAuthorChange={({ target }) => setAuthor(target.value)}
-          handleUrlChange={({ target }) => setUrl(target.value)}
+        <BlogForm
+          createBlog={addBlog}
+          setNotification={setNotification}
         />
       </Togglable>
       {blogs.map(blog =>
