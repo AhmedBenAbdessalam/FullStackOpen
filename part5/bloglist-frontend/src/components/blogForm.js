@@ -8,7 +8,7 @@ const BlogForm = ({ createBlog, setNotification }) => {
   const handleNewBlog = async e => {
     e.preventDefault()
     try {
-      await createBlog({ title, author, url })
+      await createBlog({ title, author, url, likes:0 })
       setNotification({ style: 'valid', message: `a new blog ${title} by ${author} added` })
       setTimeout(() => {
         setNotification({})
@@ -51,7 +51,7 @@ const BlogForm = ({ createBlog, setNotification }) => {
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type="submit">create</button>
+        <button id='submit-blog' type="submit">create</button>
       </form>
     </div>
   )

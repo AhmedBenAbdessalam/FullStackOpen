@@ -1,6 +1,6 @@
 import propTypes from 'prop-types'
 import { React, useState } from 'react'
-const Blog = ({ blog, handleLike, handleRemove, name }) => {
+const Blog = ({ blog, handleLike, handleRemove, name, id }) => {
   const [visible, setVisible] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -11,7 +11,7 @@ const Blog = ({ blog, handleLike, handleRemove, name }) => {
   }
   const showWhenVisible = { display: visible ? '' : 'none' }
   return(
-    <div style={blogStyle} className='blog'>
+    <div style={blogStyle} className='blog' id={id}>
       {blog.title} {blog.author} <button id='visibility-btn' onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
       <div style={showWhenVisible} className='blog-info'>
         <div>{blog.url}</div>
