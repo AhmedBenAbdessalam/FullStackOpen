@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -12,6 +12,7 @@ const App = () => {
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({})
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -50,6 +51,7 @@ const App = () => {
   }
   
   const addBlog = async (blogObj) => {
+    blogFormRef.current.toggleVisibility()
     const returnedObj = await blogService.create(blogObj)
     setBlogs(blogs.concat(returnedObj))
   }
@@ -60,6 +62,14 @@ const App = () => {
     const returnedObj = await blogService.update(sentBlog)
     
     setBlogs(blogs.map(blog => blog.id !== returnedObj.id ? blog : returnedObj))
+  }
+
+  const handleRemove = async (blogObj) => {
+    if(window.confirm(`remove blog ${blogObj.title} by ${blogObj.author}`))
+    {
+      await blogService.remove(blogObj.id)
+      setBlogs(blogs.filter(blog => blog.id !== blogObj.id))
+    }
   }
 
   if (user === null) {
@@ -100,7 +110,7 @@ const App = () => {
         {user.name} logged in 
         <button onClick={handleLogout}>logout</button>
       </p>
-      <Togglable buttonLabel="create new blog">
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm
           createBlog={addBlog}
           setNotification={setNotification}
@@ -108,7 +118,7 @@ const App = () => {
       </Togglable>
       {blogs.sort((a,b) => b.likes - a.likes)
       .map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+        <Blog key={blog.id} blog={blog} handleLike={handleLike} handleRemove={handleRemove} name={user.name} />
       )}
     </div>
   )
