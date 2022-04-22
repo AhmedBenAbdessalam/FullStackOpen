@@ -76,23 +76,23 @@ describe('Blog app', function () {
           cy.get('#author').type(blog.author)
           cy.get('#url').type(blog.url)
           cy.get('#submit-blog').click()
-          cy.get(`#blog-${index}`).contains(`${blog.title} ${blog.author}`, { timeout: 10000 })
+          cy.contains(`${blog.title} ${blog.author}`, { timeout: 10000 })
         })
       })
       it('user can like a blog', function () {
-        cy.get('#blog-1 button').contains('view').click()
-        cy.get('#blog-1 button').contains('like').click()
-        cy.get('#blog-1').contains('1 likes')
+        cy.get('.blog').eq(1).contains('view').click()
+        cy.get('.blog').eq(1).contains('like').click()
+        cy.get('.blog').contains('1 likes')
       })
       it('user can remove his own blog', function() {
-        cy.get('#blog-1 button').contains('view').click()
-        cy.get('#blog-1 button').contains('remove').click()
+        cy.get('.blog').eq(1).contains('view').click()
+        cy.get('.blog').eq(1).contains('remove').click()
         cy.on('window:confirm', (text) => {
-          expect(text).to.contains('remove blog test blog 2 by test author 2');
+          expect(text).contains('remove blog test blog 2 by test author 2');
         })
-        cy.contains('#blog-1 button').should('not.exist');
+        cy.contains('test blog 2 test author 2').should('not.exist');
       })
-      it.only('user cannot remove someone else blog', function () {
+      it('user cannot remove someone else blog', function () {
         //logout
         cy.get('button').contains('logout').click()
         const user2 = {
@@ -109,8 +109,21 @@ describe('Blog app', function () {
           })
         cy.visit('http://localhost:3000')
 
-        cy.get('#blog-1 button').contains('view').click()
-        cy.get('#blog-1 button').contains('remove').should('not.exist');
+        cy.get('.blog').eq(1).contains('view').click()
+        cy.get('.blog').eq(1).contains('remove').should('not.exist');
+      })
+      it.only('blogs should be ordered by number of likes',function(){
+        cy.get('.blog').eq(1).contains('view').click()
+        cy.get('.blog').eq(1).contains('like').click()
+        cy.get('.blog').contains('1 likes')
+        cy.get('.blog').eq(0).contains('like').click()
+        cy.get('.blog').contains('2 likes')
+        cy.get('.blog').eq(2).contains('view').click()
+        cy.get('.blog').eq(2).contains('like').click()
+        cy.get('.blog').contains('1 likes')
+        cy.get('.blog').eq(0).contains('2 likes')
+        cy.get('.blog').eq(1).contains('1 likes')
+        cy.get('.blog').eq(2).contains('0 likes')
       })
     })
    

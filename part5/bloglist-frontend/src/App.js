@@ -117,9 +117,8 @@ const App = () => {
         />
       </Togglable>
       {blogs.sort((a,b) => b.likes - a.likes)
-        .map((blog,index) =>
+        .map(blog =>
           <Blog
-            id={`blog-${index}`}
             key={blog.id}
             blog={blog}
             handleLike={handleLike}
