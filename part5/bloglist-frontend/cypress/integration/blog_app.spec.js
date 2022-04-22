@@ -84,6 +84,34 @@ describe('Blog app', function () {
         cy.get('#blog-1 button').contains('like').click()
         cy.get('#blog-1').contains('1 likes')
       })
+      it('user can remove his own blog', function() {
+        cy.get('#blog-1 button').contains('view').click()
+        cy.get('#blog-1 button').contains('remove').click()
+        cy.on('window:confirm', (text) => {
+          expect(text).to.contains('remove blog test blog 2 by test author 2');
+        })
+        cy.contains('#blog-1 button').should('not.exist');
+      })
+      it.only('user cannot remove someone else blog', function () {
+        //logout
+        cy.get('button').contains('logout').click()
+        const user2 = {
+          name: 'test user 2',
+          username: 'test2',
+          password: 'password2'
+        }
+        cy.request('POST', 'http://localhost:3003/api/users/', user2)
+        //login
+        cy.request('POST', 'http://localhost:3003/api/login',
+          { username: user2.username, password: user2.password })
+          .then(response => {
+            localStorage.setItem('loggedBlogappUser', JSON.stringify(response.body))
+          })
+        cy.visit('http://localhost:3000')
+
+        cy.get('#blog-1 button').contains('view').click()
+        cy.get('#blog-1 button').contains('remove').should('not.exist');
+      })
     })
    
   })
