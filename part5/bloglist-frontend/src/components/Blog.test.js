@@ -1,18 +1,19 @@
 import React from "react";
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen} from "@testing-library/react";
+import userEvent from '@testing-library/user-event'
 import Blog from "./Blog";
 
-test('only render title and author',()=>{
-  const blog = {
-    title: 'test title',
-    author: 'test author',
-    url: 'test url',
-    likes: 0,
-    user: {
-      name: 'test name'
-    }
+const blog = {
+  title: 'test title',
+  author: 'test author',
+  url: 'test url',
+  likes: 0,
+  user: {
+    name: 'test name'
   }
+}
+test('only render title and author',()=>{
   const mockHandler = jest.fn()
   const { container } = render(<Blog blog={blog} 
     handleLike={mockHandler} 
@@ -22,4 +23,18 @@ test('only render title and author',()=>{
   expect(div).toHaveTextContent('test title test author')
   const blogInfo = container.querySelector('.blog-info')
   expect(blogInfo).toHaveStyle('display: none')
+})
+test('render url and number of likes when the button controlling the shown details has been clicked.',
+async ()=>{
+  const mockHandler = jest.fn()
+  const { container } = render(<Blog blog={blog}
+    handleLike={mockHandler}
+    handleRemove={mockHandler}
+    name="test name" />)
+  const user = userEvent.setup()
+  const button = container.querySelector('#visibility-btn')
+  await user.click(button)
+  expect(button).toHaveTextContent('hide')
+  const blogInfo = container.querySelector('.blog-info')
+  expect(blogInfo).not.toHaveStyle('display: none')
 })
