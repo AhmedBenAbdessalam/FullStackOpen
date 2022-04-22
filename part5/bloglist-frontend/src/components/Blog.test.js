@@ -38,3 +38,18 @@ async ()=>{
   const blogInfo = container.querySelector('.blog-info')
   expect(blogInfo).not.toHaveStyle('display: none')
 })
+test('increase like by 2 when like button get pressed twice',async()=>{
+  const mockHandler = jest.fn()
+  const mockHandlerLike = jest.fn()
+
+  render(<Blog blog={blog}
+    handleLike={mockHandlerLike}
+    handleRemove={mockHandler}
+    name="test name" />)
+  const user = userEvent.setup()
+  const button = screen.getByText('like')
+  await user.click(button)
+  await user.click(button)
+  expect(mockHandlerLike.mock.calls).toHaveLength(2)
+
+})
