@@ -39,7 +39,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      setNotification({style: 'invalid', message:'wrong username or password'})
+      setNotification({ style: 'invalid', message:'wrong username or password' })
       setTimeout(() => {
         setNotification({})
       }, 5000)
@@ -117,15 +117,15 @@ const App = () => {
         />
       </Togglable>
       {blogs.sort((a,b) => b.likes - a.likes)
-      .map(blog =>
-        <Blog 
-        key={blog.id} 
-        blog={blog} 
-        handleLike={handleLike} 
-        handleRemove={handleRemove} 
-        name={user.name} 
-        />
-      )}
+        .map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLike={handleLike}
+            handleRemove={handleRemove}
+            name={user.name}
+          />
+        )}
     </div>
   )
 }

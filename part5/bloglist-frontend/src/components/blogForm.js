@@ -1,15 +1,15 @@
 import { useState } from 'react'
 
 const BlogForm = ({ createBlog, setNotification }) => {
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   const handleNewBlog = async e => {
     e.preventDefault()
     try {
-      await createBlog({title, author, url})
-      setNotification({ style: "valid", message: `a new blog ${title} by ${author} added` })
+      await createBlog({ title, author, url })
+      setNotification({ style: 'valid', message: `a new blog ${title} by ${author} added` })
       setTimeout(() => {
         setNotification({})
       }, 5000)
@@ -17,7 +17,7 @@ const BlogForm = ({ createBlog, setNotification }) => {
       setAuthor('')
       setUrl('')
     } catch (error) {
-      setNotification({ style: "invalid", message: "something went wrong when adding a new blog" })
+      setNotification({ style: 'invalid', message: 'something went wrong when adding a new blog' })
       setTimeout(() => {
         setNotification({})
       }, 5000)
@@ -32,7 +32,7 @@ const BlogForm = ({ createBlog, setNotification }) => {
           <input
             value={title}
             id='title'
-            onChange={({target}) => setTitle(target.value)}
+            onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
