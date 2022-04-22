@@ -24,13 +24,14 @@ const BlogForm = ({ createBlog, setNotification }) => {
     }
   }
   return (
-    <div>
+    <div id='blog-form'>
       <h2>create new</h2>
       <form onSubmit={handleNewBlog}>
         <div>
           title:
           <input
             value={title}
+            id='title'
             onChange={({target}) => setTitle(target.value)}
           />
         </div>
@@ -38,14 +39,16 @@ const BlogForm = ({ createBlog, setNotification }) => {
           author:
           <input
             value={author}
-            onChange={({target}) => setAuthor(target.value)}
+            id='author'
+            onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
           url:
           <input
             value={url}
-            onChange={({target}) => setUrl(target.value)}
+            id='url'
+            onChange={({ target }) => setUrl(target.value)}
           />
         </div>
         <button type="submit">create</button>
