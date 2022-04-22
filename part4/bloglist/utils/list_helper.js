@@ -1,51 +1,55 @@
 const _ = require('lodash')
-const dummy = (blogs) => {
-  return 1
-}
+const dummy = (blogs) => 1
 
 const totalLikes = (blogs) => {
-  const nbLikes = blogs.reduce((sum,blog) => sum + blog.likes,0)
-  return nbLikes
-}
-
-const favoriteBlog =(blogs) => {
-  const popularBlog = blogs.reduce((popular,blog) => {
-    return (popular.likes > blog.likes) ? popular : blog
-  },{})
-
-  if (!popularBlog.title)
+  if (blogs.length === 0) {
     return 0
-  else
-    return { title: popularBlog.title, author: popularBlog.author, likes:popularBlog.likes }
+  }
+
+  return blogs.reduce((sum, b) => sum + b.likes, 0)
 }
 
-// get author with most blogs
-const mostBlogs  = (blogs) => {
-  const authors = _.chain(blogs)
-    .groupBy('author')
-    .map((value,key) => {
-     return { author: key, blogs: value.length }
-    })
-    .value()
-    console.log('authors',authors)
-  const result = _.maxBy(authors, 'blogs')
-  console.log('result',result)
-  return result
+const favoriteBlogs = (blogs) => {
+  if (blogs.length === 0) {
+    return undefined
+  }
+
+  return blogs.sort((a, b) => b.likes - a.likes)[0]
 }
 
-const mostLikes =(blogs) => {
-  const authors = _.chain(blogs)
-    .groupBy('author')
-    .map((value,key) => ({ author: key, likes: totalLikes(value) }))
-    .value()
-  const result = _.maxBy(authors, 'likes')
-  return result
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) {
+    return undefined
+  }
+
+  const byAuthor = _.groupBy(blogs, (b) => b.author)
+  const likeCounts = Object.keys(byAuthor).map(name => {
+    return {
+      name,
+      blogs: byAuthor[name].length
+    }
+  })
+
+  return likeCounts.sort((a, b) => b.blogs - a.blogs)[0].name
+}
+
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return undefined
+  }
+
+  const byAuthor = _.groupBy(blogs, (b) => b.author)
+  const likeCounts = Object.keys(byAuthor).map(name => {
+    return {
+      name,
+      likes: byAuthor[name].reduce((s, b) => s + b.likes, 0)
+    }
+  })
+
+
+  return likeCounts.sort((a, b) => b.likes - a.likes)[0].name
 }
 
 module.exports = {
-  dummy,
-  totalLikes,
-  favoriteBlog,
-  mostBlogs,
-  mostLikes
+  dummy, totalLikes, favoriteBlogs, mostBlogs, mostLikes
 }
