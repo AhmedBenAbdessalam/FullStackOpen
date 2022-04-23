@@ -1,4 +1,4 @@
-import { addLike } from './anecdoteReducer'
+import { addLike, addAnecdote } from './anecdoteReducer'
 import reducer from './anecdoteReducer'
 describe('anecdote reducer tests',()=>{
   test('like anecdote',()=>{
@@ -13,5 +13,11 @@ describe('anecdote reducer tests',()=>{
       id: 0,
       votes: 1
     })
+  })
+  test('add a new anecdote',()=>{
+    const newState = reducer([],addAnecdote('a new anecdote'))
+    expect(newState).toHaveLength(1)
+    expect(newState[0].content).toBe('a new anecdote')
+
   })
 })
