@@ -1,13 +1,12 @@
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { setFilter } from "../reducers/filterReducer";
 
-const FilterForm = () => {
+const FilterForm = props => {
   const style = {
     marginBottom: 10
   }
-  const dispatch = useDispatch()
   const handleFilter = (e) =>{
-    dispatch(setFilter(e.target.value.toLowerCase()))
+    props.setFilter(e.target.value.toLowerCase())
   }
   return (
     <div style={style}>
@@ -16,4 +15,4 @@ const FilterForm = () => {
   )
 }
 
-export default FilterForm
+export default connect(null,{setFilter})(FilterForm)

@@ -39,6 +39,11 @@
       "content": "an anecdote with trunk",
       "votes": 0,
       "id": "GnZSKpr"
+    },
+    {
+      "content": "new anecdote with the old redux way",
+      "votes": 0,
+      "id": "q54-sYL"
     }
   ]
 }
