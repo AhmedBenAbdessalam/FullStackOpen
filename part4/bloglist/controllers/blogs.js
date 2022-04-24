@@ -19,14 +19,15 @@ router.post('/', async (request, response) => {
 
   const user = request.user
   const blog = new Blog({ ...request.body, user: user.id })
-
+  
   const savedBlog = await blog.save()
 
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
   const blogWithUser = await Blog
-    .find({ savedBlog})
-    .find({}).populate('user', { username: 1, name: 1 })
+    .findById(savedBlog.id)
+    .populate('user', { username: 1, name: 1 })
+  console.log(blogWithUser)
   response.status(201).json(blogWithUser)
 })
 

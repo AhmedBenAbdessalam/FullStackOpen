@@ -8,8 +8,8 @@ import Togglable from './components/toggable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({})
   const blogFormRef = useRef()
@@ -17,7 +17,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -39,17 +39,17 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      setNotification({style: "invalid", message:"wrong username or password"})
+      setNotification({ style: 'invalid', message:'wrong username or password' })
       setTimeout(() => {
         setNotification({})
       }, 5000)
-    } 
+    }
   }
   const handleLogout = () => {
     setUser(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }
-  
+
   const addBlog = async (blogObj) => {
     blogFormRef.current.toggleVisibility()
     const returnedObj = await blogService.create(blogObj)
@@ -60,7 +60,7 @@ const App = () => {
     const updatedBlog = { ...blogObj, like: blogObj.like + 1 }
     const sentBlog = { id: updatedBlog.id, title: updatedBlog.title, author: updatedBlog.author, url: updatedBlog.url, likes: updatedBlog.likes + 1 }
     const returnedObj = await blogService.update(sentBlog)
-    
+
     setBlogs(blogs.map(blog => blog.id !== returnedObj.id ? blog : returnedObj))
   }
 
@@ -107,7 +107,7 @@ const App = () => {
       <h2>blogs</h2>
       <Notification style={notification.style} message={notification.message} />
       <p>
-        {user.name} logged in 
+        {user.name} logged in
         <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
@@ -117,9 +117,15 @@ const App = () => {
         />
       </Togglable>
       {blogs.sort((a,b) => b.likes - a.likes)
-      .map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={handleLike} handleRemove={handleRemove} name={user.name} />
-      )}
+        .map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLike={handleLike}
+            handleRemove={handleRemove}
+            name={user.name}
+          />
+        )}
     </div>
   )
 }
