@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addLike, initializeAnecdotes } from '../reducers/anecdoteReducer'
+import { initializeAnecdotes, like } from '../reducers/anecdoteReducer'
 import { removeNotification, setNotification  } from '../reducers/notificationReducer'
 const Anecdote = ({anecdote, handleVote}) =>{
   return(
@@ -24,8 +24,8 @@ const AnecdoteList = () =>{
   useEffect(() => {
     dispatch(initializeAnecdotes())
   },[dispatch])
-  const vote = (id) => {
-    dispatch(addLike(id))
+  const vote = anecdote => {
+    dispatch(like(anecdote))
   }
   return(
     <>
@@ -35,7 +35,7 @@ const AnecdoteList = () =>{
         .map(anecdote =>
           <Anecdote key={anecdote.id} anecdote={anecdote} 
           handleVote={()=>{
-            vote(anecdote.id)
+            vote(anecdote)
             dispatch(setNotification(`you voted '${anecdote.content}'`))
             setTimeout(() => {
               dispatch(removeNotification())
