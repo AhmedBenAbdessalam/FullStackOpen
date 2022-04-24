@@ -88,7 +88,11 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} name='info' />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button> <button type='button' onClick={()=>{
+          content.reset()
+          author.reset()
+          info.reset()
+        }}>reset</button>
       </form>
     </div>
   )
@@ -140,8 +144,6 @@ const App = () => {
   }
   const match = useMatch('/:id')
   const anecdote = match ? anecdotes.find(note => note.id === Number(match.params.id)) : null
-  console.log(match);
-  console.log(anecdote);
   return (
     <div>
       <h1>Software anecdotes</h1>
