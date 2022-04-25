@@ -7,11 +7,12 @@ import Togglable from './components/toggable'
 import { setNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
-import { login, logout } from './reducers/userReducer'
+import { login } from './reducers/userReducer'
 import { Link, Route, Routes, useMatch } from 'react-router-dom'
 import UserList from './components/UserList'
 import userService from './services/users'
 import User from './components/User'
+import Navigation from './components/Navigation'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -47,9 +48,6 @@ const App = () => {
       dispatch(setNotification('wrong username or password', 'invalid', 5000))
     }
   }
-  const handleLogout = () => {
-    dispatch(logout())
-  }
 
   const matchUser = useMatch('/users/:id')
   const linkUser = matchUser ? users.find(user => user.id === matchUser.params.id) : null
@@ -64,8 +62,6 @@ const App = () => {
   }
   return (
     <div>
-      <h2>blogs</h2>
-      <Notification />
       {user === null ?
         <div>
           <h2>Log in to application</h2>
@@ -95,12 +91,14 @@ const App = () => {
         </div>
         :
         <div>
-          <p>
-            {user.name} logged in
-          </p>
-          <button onClick={handleLogout}>logout</button>
+          <Navigation message={`${user.name} logged in`} />
+          <h2>blogs</h2>
+
         </div>
       }
+
+      <Notification />
+
       <Routes>
         <Route path='/users' element={<UserList users={users} />} />
         <Route path='/users/:id' element={<User user={linkUser} />} />
