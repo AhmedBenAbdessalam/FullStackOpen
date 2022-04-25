@@ -17,7 +17,7 @@ const create = async newObject => {
   const config = {
     headers: { Authorization: token },
   }
-  if(newObject.like === undefined){
+  if (newObject.like === undefined) {
     newObject.like = 0
   }
   const response = await axios.post(baseUrl, newObject, config)
@@ -27,7 +27,7 @@ const update = async (newObject) => {
   const config = {
     headers: { Authorization: token },
   }
-  const request = axios.put(`${baseUrl}/${newObject.id}`, { ...newObject },config)
+  const request = axios.put(`${baseUrl}/${newObject.id}`, { ...newObject }, config)
   return request.then(response => response.data)
 
 }
@@ -38,5 +38,11 @@ const remove = async (id) => {
   const request = axios.delete(`${baseUrl}/${id}`, config)
   return request.then(response => response.data)
 }
+const addComment = async (blogId, comment) => {
 
-export default { getAll, setToken, create, update, remove }
+  const request = await axios.post(`${baseUrl}/${blogId}/comments`, { comment })
+  return request.data
+}
+
+
+export default { getAll, setToken, create, update, remove, addComment }
