@@ -6,19 +6,19 @@ import Notification from './components/Notification'
 import BlogForm from './components/blogForm'
 import Togglable from './components/toggable'
 import { setNotification } from './reducers/notificationReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  //const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
   const dispatch = useDispatch()
+  const blogs = [...useSelector(state => state.blogs)]
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    dispatch(initializeBlogs())
   }, [])
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -48,26 +48,26 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
   }
 
-  const addBlog = async (blogObj) => {
-    blogFormRef.current.toggleVisibility()
-    const returnedObj = await blogService.create(blogObj)
-    setBlogs(blogs.concat(returnedObj))
-  }
-  const handleLike = async (blogObj) => {
+  // const addBlog = async (blogObj) => {
+  //   blogFormRef.current.toggleVisibility()
+  //   const returnedObj = await blogService.create(blogObj)
+  //   setBlogs(blogs.concat(returnedObj))
+  // }
+  // const handleLike = async (blogObj) => {
 
-    const updatedBlog = { ...blogObj, like: blogObj.like + 1 }
-    const sentBlog = { id: updatedBlog.id, title: updatedBlog.title, author: updatedBlog.author, url: updatedBlog.url, likes: updatedBlog.likes + 1 }
-    const returnedObj = await blogService.update(sentBlog)
+  //   const updatedBlog = { ...blogObj, like: blogObj.like + 1 }
+  //   const sentBlog = { id: updatedBlog.id, title: updatedBlog.title, author: updatedBlog.author, url: updatedBlog.url, likes: updatedBlog.likes + 1 }
+  //   const returnedObj = await blogService.update(sentBlog)
 
-    setBlogs(blogs.map(blog => blog.id !== returnedObj.id ? blog : returnedObj))
-  }
+  //   setBlogs(blogs.map(blog => blog.id !== returnedObj.id ? blog : returnedObj))
+  // }
 
-  const handleRemove = async (blogObj) => {
-    if (window.confirm(`remove blog ${blogObj.title} by ${blogObj.author}`)) {
-      await blogService.remove(blogObj.id)
-      setBlogs(blogs.filter(blog => blog.id !== blogObj.id))
-    }
-  }
+  // const handleRemove = async (blogObj) => {
+  //   if (window.confirm(`remove blog ${blogObj.title} by ${blogObj.author}`)) {
+  //     await blogService.remove(blogObj.id)
+  //     setBlogs(blogs.filter(blog => blog.id !== blogObj.id))
+  //   }
+  // }
 
   if (user === null) {
     return (
@@ -108,20 +108,18 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm
-          createBlog={addBlog}
-        />
+        <BlogForm />
       </Togglable>
-      {blogs.sort((a, b) => b.likes - a.likes)
-        .map(blog =>
-          <Blog
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map(blog => {
+          console.log(blog)
+          return (<Blog
             key={blog.id}
             blog={blog}
-            handleLike={handleLike}
-            handleRemove={handleRemove}
             name={user.name}
-          />
-        )}
+          />)
+        })}
     </div>
   )
 }

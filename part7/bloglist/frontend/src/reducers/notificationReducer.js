@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const notificationSlive = createSlice({
+const notificationSlice = createSlice({
   name: 'notification',
   initialState: { message: '' },
   reducers: {
@@ -14,7 +14,7 @@ const notificationSlive = createSlice({
     }
   },
 })
-export const { addNotification, clearNotification } = notificationSlive.actions
+export const { addNotification, clearNotification } = notificationSlice.actions
 export const setNotification = (message, style, timer) => {
   return dispatch => {
     //set new timeout
@@ -31,4 +31,4 @@ export const setNotification = (message, style, timer) => {
   }
 }
 
-export default notificationSlive.reducer
+export default notificationSlice.reducer
