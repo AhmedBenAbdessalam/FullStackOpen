@@ -1,35 +1,19 @@
-import { useEffect, useState } from 'react'
-import userService from '../services/users'
-const UserList = () => {
-  const [users, setUsers] = useState([])
-  useEffect(() => {
-    userService.getAll().then(users => setUsers(users))
-  }, [])
+const User = ({ user }) => {
+  if (!user) {
+    return null
+  }
   return (
-    <div>
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>blogs created</th>
-          </tr>
-          {users.map(user =>
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.blogs.length}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-const User = () => {
-  return (
-    <div>
-      <h2>Users</h2>
-      <UserList />
-    </div>
+    <>
+      <h1>{user.name}</h1>
+      <h2>added blogs</h2>
+      <ul>
+        {user.blogs.map(blog =>
+          <li key={blog.id}>
+            {blog.title}
+          </li>
+        )}
+      </ul>
+    </>
   )
 }
 export default User
