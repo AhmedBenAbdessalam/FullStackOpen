@@ -10,6 +10,10 @@ const Blog = ({ blog }) => {
       <a href={blog.url}>{blog.url}</a>
       <div>{blog.likes} likes <button onClick={() => { dispatch(likeBlog(blog)) }} >like</button></div>
       <div>added by {blog.user.name}</div>
+      <h2>comments</h2>
+      <ul>
+        {blog.comments.map(comment => <li key={comment.id}>{comment.comment}</li>)}
+      </ul>
     </div>
   )
 }

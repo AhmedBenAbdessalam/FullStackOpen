@@ -92,7 +92,7 @@ const App = () => {
         :
         <div>
           <Navigation message={`${user.name} logged in`} />
-          <h2>blogs</h2>
+          <h1>blogs</h1>
 
         </div>
       }
