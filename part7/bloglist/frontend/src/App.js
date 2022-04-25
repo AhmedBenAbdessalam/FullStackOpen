@@ -8,7 +8,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { login, logout } from './reducers/userReducer'
-import { Route, Routes, useMatch } from 'react-router-dom'
+import { Link, Route, Routes, useMatch } from 'react-router-dom'
 import UserList from './components/UserList'
 import userService from './services/users'
 import User from './components/User'
@@ -51,8 +51,17 @@ const App = () => {
     dispatch(logout())
   }
 
-  const match = useMatch('/users/:id')
-  const linkUser = match ? users.find(user => user.id === match.params.id) : null
+  const matchUser = useMatch('/users/:id')
+  const linkUser = matchUser ? users.find(user => user.id === matchUser.params.id) : null
+  const matchBlog = useMatch('/blogs/:id')
+  const linkBlog = matchBlog ? blogs.find(blog => blog.id === matchBlog.params.id) : null
+  const linkStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
   return (
     <div>
       <h2>blogs</h2>
@@ -95,6 +104,7 @@ const App = () => {
       <Routes>
         <Route path='/users' element={<UserList users={users} />} />
         <Route path='/users/:id' element={<User user={linkUser} />} />
+        <Route path='/blogs/:id' element={<Blog blog={linkBlog} />} />
         <Route path='/' element={
           <div>
             {user === null
@@ -106,11 +116,15 @@ const App = () => {
                 {
                   blogs.sort((a, b) => b.likes - a.likes)
                     .map(blog => {
-                      return (<Blog
-                        key={blog.id}
-                        blog={blog}
-                        name={user.name}
-                      />)
+                      return (
+                        <div key={blog.id} style={linkStyle} >
+                          <Link
+                            key={blog.id}
+                            to={`/blogs/${blog.id}`} >
+                            {blog.title} {blog.author}
+                          </Link>
+                        </div>
+                      )
                     }
                     )
                 }
