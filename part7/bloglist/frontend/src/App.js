@@ -8,6 +8,8 @@ import { setNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { login, logout } from './reducers/userReducer'
+import { Route, Routes } from 'react-router-dom'
+import User from './components/user'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -43,59 +45,122 @@ const App = () => {
   const handleLogout = () => {
     dispatch(logout())
   }
-  if (user === null) {
-    return (
-      <div>
-        <h2>Log in to application</h2>
-        <Notification />
-        <form onSubmit={handleLogin}>
-          <div>
-            <label htmlFor='username'>username</label>
-            <input
-              value={username}
-              id='username'
-              name='Username'
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor='password'>password</label>
-            <input
-              value={password}
-              id='password'
-              type='password'
-              name='Password'
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type='submit'>login</button>
-        </form>
-      </div>
-    )
-  }
+  // if (user === null) {
+  //   return (
+  //     <div>
+  //       <h2>Log in to application</h2>
+  //       <Notification />
+  //       <form onSubmit={handleLogin}>
+  //         <div>
+  //           <label htmlFor='username'>username</label>
+  //           <input
+  //             value={username}
+  //             id='username'
+  //             name='Username'
+  //             onChange={({ target }) => setUsername(target.value)}
+  //           />
+  //         </div>
+  //         <div>
+  //           <label htmlFor='password'>password</label>
+  //           <input
+  //             value={password}
+  //             id='password'
+  //             type='password'
+  //             name='Password'
+  //             onChange={({ target }) => setPassword(target.value)}
+  //           />
+  //         </div>
+  //         <button type='submit'>login</button>
+  //       </form>
+  //     </div>
+  //   )
+  // }
+  // return (
+  //   <div>
+  //     <h2>blogs</h2>
+  //     <Notification />
+  //     <p>
+  //       {user.name} logged in
+  //       <button onClick={handleLogout}>logout</button>
+  //     </p>
+  //     <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+  //       <BlogForm />
+  //     </Togglable>
+  //     {blogs
+  //       .sort((a, b) => b.likes - a.likes)
+  //       .map(blog => {
+  //         console.log(blog)
+  //         return (<Blog
+  //           key={blog.id}
+  //           blog={blog}
+  //           name={user.name}
+  //         />)
+  //       })}
+  //   </div>
+  // )
   return (
     <div>
       <h2>blogs</h2>
       <Notification />
-      <p>
-        {user.name} logged in
-        <button onClick={handleLogout}>logout</button>
-      </p>
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm />
-      </Togglable>
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map(blog => {
-          console.log(blog)
-          return (<Blog
-            key={blog.id}
-            blog={blog}
-            name={user.name}
-          />)
-        })}
+      {user === null ?
+        <div>
+          <h2>Log in to application</h2>
+          <form onSubmit={handleLogin}>
+            <div>
+              <label htmlFor='username'>username</label>
+              <input
+
+                value={username}
+                id='username'
+                name='Username'
+                onChange={({ target }) => setUsername(target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor='password'>password</label>
+              <input
+                value={password}
+                id='password'
+                type='password'
+                name='Password'
+                onChange={({ target }) => setPassword(target.value)}
+              />
+            </div>
+            <button type='submit'>login</button>
+          </form>
+        </div>
+        :
+        <div>
+          <p>
+            {user.name} logged in
+          </p>
+          <button onClick={handleLogout}>logout</button>
+        </div>
+      }
+      <Routes>
+        <Route path='/users' element={<User />} />
+        <Route path='/' element={
+          <div>
+            <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+              <BlogForm />
+            </Togglable>
+            {
+              blogs.sort((a, b) => b.likes - a.likes)
+                .map(blog => {
+                  return (<Blog
+                    key={blog.id}
+                    blog={blog}
+                    name={user.name}
+                  />)
+                }
+                )
+            }</div>
+        } />
+      </Routes>
     </div>
   )
+
+
 }
 
 export default App

@@ -28,8 +28,6 @@ const Blog = ({ blog, name }) => {
 
 Blog.propTypes = {
   blog: propTypes.object.isRequired,
-  handleLike: propTypes.func.isRequired,
-  handleRemove: propTypes.func.isRequired,
   name: propTypes.string.isRequired
 }
 
