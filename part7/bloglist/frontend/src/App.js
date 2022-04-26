@@ -13,6 +13,7 @@ import UserList from './components/UserList'
 import userService from './services/users'
 import User from './components/User'
 import Navigation from './components/Navigation'
+import { Button, Container, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -41,11 +42,11 @@ const App = () => {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       dispatch(login(user))
-      dispatch(setNotification(`Hello ${user.name}`, 'valid', 5000))
+      dispatch(setNotification(`Hello ${user.name}`, 'success', 5000))
       setUsername('')
       setPassword('')
     } catch (error) {
-      dispatch(setNotification('wrong username or password', 'invalid', 5000))
+      dispatch(setNotification('wrong username or password', 'error', 5000))
     }
   }
 
@@ -53,23 +54,16 @@ const App = () => {
   const linkUser = matchUser ? users.find(user => user.id === matchUser.params.id) : null
   const matchBlog = useMatch('/blogs/:id')
   const linkBlog = matchBlog ? blogs.find(blog => blog.id === matchBlog.params.id) : null
-  const linkStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
   return (
-    <div>
+    <Container>
       {user === null ?
         <div>
-          <h2>Log in to application</h2>
+          <Typography variant='h2' mb={5}>Log in to application</Typography>
           <form onSubmit={handleLogin}>
             <div>
-              <label htmlFor='username'>username</label>
-              <input
-
+              <TextField
+                variant='standard'
+                label='username'
                 value={username}
                 id='username'
                 name='Username'
@@ -77,8 +71,9 @@ const App = () => {
               />
             </div>
             <div>
-              <label htmlFor='password'>password</label>
-              <input
+              <TextField
+                variant='standard'
+                label='password'
                 value={password}
                 id='password'
                 type='password'
@@ -86,52 +81,57 @@ const App = () => {
                 onChange={({ target }) => setPassword(target.value)}
               />
             </div>
-            <button type='submit'>login</button>
+            <Button variant='outlined' type='submit' sx={{ mt: 2 }} >login</Button>
           </form>
         </div>
         :
         <div>
           <Navigation message={`${user.name} logged in`} />
-          <h1>blogs</h1>
-
         </div>
       }
 
       <Notification />
 
       <Routes>
-        <Route path='/users' element={<UserList users={users} />} />
-        <Route path='/users/:id' element={<User user={linkUser} />} />
-        <Route path='/blogs/:id' element={<Blog blog={linkBlog} />} />
+        <Route path='/users' element={user ? <UserList users={users} /> : null} />
+        <Route path='/users/:id' element={user ? <User user={linkUser} /> : null} />
+        <Route path='/blogs/:id' element={user ? <Blog blog={linkBlog} /> : null} />
         <Route path='/' element={
           <div>
             {user === null
               ? null
               : <div>
+                <Typography variant='h2' pb={5} pt={5}>Blogs</Typography>
                 <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-                  <BlogForm />
+                  <BlogForm blogFormRef={blogFormRef} />
                 </Togglable>
-                {
-                  blogs.sort((a, b) => b.likes - a.likes)
-                    .map(blog => {
-                      return (
-                        <div key={blog.id} style={linkStyle} >
-                          <Link
-                            key={blog.id}
-                            to={`/blogs/${blog.id}`} >
-                            {blog.title} {blog.author}
-                          </Link>
-                        </div>
-                      )
+                <Table>
+                  <TableBody >
+                    {
+                      blogs.sort((a, b) => b.likes - a.likes)
+                        .map(blog => {
+                          return (
+                            <TableRow key={blog.id}  >
+                              <TableCell>
+                                <Link
+                                  key={blog.id}
+                                  to={`/blogs/${blog.id}`} >
+                                  {blog.title} {blog.author}
+                                </Link>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        }
+                        )
                     }
-                    )
-                }
+                  </TableBody>
+                </Table>
               </div>
             }
           </div>
         } />
       </Routes>
-    </div>
+    </Container>
   )
 
 

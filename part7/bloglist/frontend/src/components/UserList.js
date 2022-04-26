@@ -1,23 +1,25 @@
-import { Link } from 'react-router-dom'
+import { Link, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 const UserList = ({ users }) => {
 
   return (
     <div>
-      <h2>Users</h2>
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>blogs created</th>
-          </tr>
+      <Typography variant='h2' pt={5}>Users</Typography>
+      <Table >
+        <TableHead>
+          <TableRow>
+            <TableCell></TableCell>
+            <TableCell>blogs created</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {users.map(user =>
-            <tr key={user.id}>
-              <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
-              <td>{user.blogs.length}</td>
-            </tr>
+            <TableRow key={user.id}>
+              <TableCell><Link underline="none" href={`/users/${user.id}`}>{user.name}</Link></TableCell>
+              <TableCell>{user.blogs.length}</TableCell>
+            </TableRow>
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }
