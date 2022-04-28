@@ -53,10 +53,10 @@ const resolvers = {
     allAuthors: async () => await Author.find({})
   },
   Author: {
-    bookCount: (root) => books.filter(book => book.author === root.name).length
+    bookCount: async (root) => (await Book.find({ author: { $in: [root.id] } })).length
   },
   Book: {
-    author: (root) => null
+    author: async (root) => await Author.findById(root.author)
   },
   Mutation: {
     addBook: async (root, args) => {
@@ -72,13 +72,10 @@ const resolvers = {
       await newBook.save()
       return newBook
     },
-    editAuthor: (root, args) => {
-      const authorToUpdate = authors.find(author => author.name === args.name)
-      if (!authorToUpdate)
-        return null
-      const updatedAuthor = { ...authorToUpdate, born: args.setBornTo }
-      authors = authors.map(author => author.name === updatedAuthor.name ? updatedAuthor : author)
-      return updatedAuthor
+    editAuthor: async (root, args) => {
+      console.log(args.setBornTo)
+      const author = await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo }, { new: true })
+      return author
     }
   }
 }
