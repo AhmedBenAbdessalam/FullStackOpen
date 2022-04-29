@@ -60,7 +60,6 @@ type Mutation {
   ): Token
 }
 `
-
 const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
