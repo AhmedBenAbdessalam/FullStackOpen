@@ -89,6 +89,7 @@ const resolvers = {
       if (!currentUser) {
         throw new AuthenticationError("not authenticated")
       }
+      console.log(args);
       if (!author) {
         author = new Author({
           name: args.author,
